@@ -10,7 +10,7 @@ import { AuthContext } from '../../contexts/auth';
 
 import { FiSettings, FiUpload } from 'react-icons/fi';
 
-export default function Profile() {
+export default function Profile(){
   const { user, signOut, setUser, storageUser } = useContext(AuthContext);
 
   const [nome, setNome] = useState(user && user.nome);
@@ -20,17 +20,17 @@ export default function Profile() {
   const [imageAvatar, setImageAvatar] = useState(null);
 
 
-  function handleFile(e) {
+  function handleFile(e){
 
-    if (e.target.files[0]) {
+    if(e.target.files[0]){
       const image = e.target.files[0];
-
-      if (image.type === 'image/jpeg' || image.type === 'image/png') {
+      
+      if(image.type === 'image/jpeg' || image.type === 'image/png'){
 
         setImageAvatar(image);
         setAvatarUrl(URL.createObjectURL(e.target.files[0]))
 
-      } else {
+      }else{
         alert('Envie uma imagem do tipo PNG ou JPEG');
         setImageAvatar(null);
         return null;
@@ -40,73 +40,73 @@ export default function Profile() {
 
   }
 
-  async function handleUpload() {
+  async function handleUpload(){
     const currentUid = user.uid;
 
     const uploadTask = await firebase.storage()
-      .ref(`images/${currentUid}/${imageAvatar.name}`)
-      .put(imageAvatar)
-      .then(async () => {
-        console.log('FOTO ENVIADA COM SUCESSO!');
+    .ref(`images/${currentUid}/${imageAvatar.name}`)
+    .put(imageAvatar)
+    .then( async () => {
+      console.log('FOTO ENVIADA COM SUCESSO!');
 
-        await firebase.storage().ref(`images/${currentUid}`)
-          .child(imageAvatar.name).getDownloadURL()
-          .then(async (url) => {
-            let urlFoto = url;
-
-            await firebase.firestore().collection('users')
-              .doc(user.uid)
-              .update({
-                avatarUrl: urlFoto,
-                nome: nome
-              })
-              .then(() => {
-                let data = {
-                  ...user,
-                  avatarUrl: urlFoto,
-                  nome: nome
-                };
-                setUser(data);
-                storageUser(data);
-
-              })
-
-          })
-
-      })
-
-  }
-
-
-  async function handleSave(e) {
-    e.preventDefault();
-
-    if (imageAvatar === null && nome !== '') {
-      await firebase.firestore().collection('users')
+      await firebase.storage().ref(`images/${currentUid}`)
+      .child(imageAvatar.name).getDownloadURL()
+      .then( async (url)=>{
+        let urlFoto = url;
+        
+        await firebase.firestore().collection('users')
         .doc(user.uid)
         .update({
+          avatarUrl: urlFoto,
           nome: nome
         })
-        .then(() => {
+        .then(()=>{
           let data = {
             ...user,
+            avatarUrl: urlFoto,
             nome: nome
-          };
+          }; 
           setUser(data);
           storageUser(data);
 
         })
 
+      })
+
+    })
+
+  }
+
+
+  async function handleSave(e){
+    e.preventDefault();
+
+    if(imageAvatar === null && nome !== ''){
+      await firebase.firestore().collection('users')
+      .doc(user.uid)
+      .update({
+        nome: nome
+      })
+      .then(()=>{
+        let data = {
+          ...user,
+          nome: nome
+        };
+        setUser(data);
+        storageUser(data);
+
+      })
+
     }
-    else if (nome !== '' && imageAvatar !== null) {
+    else if(nome !== '' && imageAvatar !== null){
       handleUpload();
     }
 
   }
 
-  return (
+  return(
     <div>
-      <Header />
+      <Header/>
 
       <div className="content">
         <Title name="Meu perfil">
@@ -121,8 +121,8 @@ export default function Profile() {
                 <FiUpload color="#FFF" size={25} />
               </span>
 
-              <input type="file" accept="image/*" onChange={handleFile} /><br />
-              {avatarUrl === null ?
+              <input type="file" accept="image/*" onChange={handleFile}  /><br/>
+              { avatarUrl === null ? 
                 <img src={avatar} width="250" height="250" alt="Foto de perfil do usuario" />
                 :
                 <img src={avatarUrl} width="250" height="250" alt="Foto de perfil do usuario" />
@@ -130,21 +130,17 @@ export default function Profile() {
             </label>
 
             <label>Nome</label>
-            <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
+            <input type="text" value={nome} onChange={ (e) => setNome(e.target.value) } />
 
             <label>Email</label>
-            <input type="text" value={email} disabled={true} />
+            <input type="text" value={email} disabled={true} />     
 
-            <button type="submit">Salvar</button>
+            <button type="submit">Salvar</button>       
 
           </form>
         </div>
 
-        <div className="container">
-          <button className="logout-btn" onClick={() => signOut()} >
-            Sair
-          </button>
-        </div>
+      
 
       </div>
     </div>
