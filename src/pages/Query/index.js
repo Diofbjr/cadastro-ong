@@ -8,13 +8,37 @@ import { FiPlus, FiSearch, FiEdit2 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 
+
+
 import firebase from '../../services/firebaseConnection';
 import Modal from '../../components/Modal';
 
 const listRef = firebase.firestore().collection('customers').orderBy('created', 'desc');
 
 export default function Query(){
-  const [chamados, setChamados] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [nome, setNome] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [setor, setSetor] = useState('');
+  
+
+
+
+  function findCadastros(){
+    firebase.firestore().collection('customers')
+    .get()
+    .then(snapshot =>{  
+      setUsers(snapshot.docs.map((doc) => ({...doc.data(),id: doc.id }) ))
+    })
+  }
+  findCadastros()
+
+
+
+
+
+
+
 
 
   
@@ -26,27 +50,38 @@ export default function Query(){
         <Title name="Consulta cadastro">
           <FiSearch size={25} />
         </Title>
+      <div className='container'>
 
-        {chamados.length === 0 ? (
-          <div className="container dashboard">
-            <span>Nenhum cadastro realizado...</span>
+      <table>
+        <thead>
+          <th scope='col'>Matricula</th>
+          <th scope='col'>Nome</th>
+          <th scope='col'>CPF</th>
+          <th scope='col'>Setor</th>
+        </thead>
+        <tbody>
+        {users.map(user => {
+          return(
+            <tr key={user.id}>
+              <td data-label='Matricula'></td>
+              <td data-label='Nome'>{user.nomeCompleto}</td>
+              <td data-label='CPF'>{user.cpf}</td>
+              <td data-label='Setor'>{user.setor}</td>
+            </tr>
+          )
+        })}
+        </tbody>
+      </table>
 
-            <Link to="/customers" className="new">
-              <FiPlus size={25} color="#FFF" />
-              Novo cadastro
-            </Link>
-          </div>
-        )  : (
-          <>
-            
 
-        
-
-          </>
-        )}
 
       </div>
 
+
+
+      </div>
+
+      
     </div>
   )
 }
