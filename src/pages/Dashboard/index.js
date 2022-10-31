@@ -13,7 +13,7 @@ export default function Dashboard(){
                 <FiHome size={25} />
                 </Title>
                 <div className="container">
-
+                    <h1>Teste</h1>
                 </div>
             </div>
         </div>
