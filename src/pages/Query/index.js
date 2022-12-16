@@ -57,7 +57,6 @@ export default function Query(){
 
       <table>
         <thead>
-          <th scope='col'>Matricula</th>
           <th scope='col'>Nome</th>
           <th scope='col'>CPF</th>
           <th scope='col'>Setor</th>
@@ -66,7 +65,6 @@ export default function Query(){
         {users.map(user => {
           return(
             <tr key={user.id}>
-              <td data-label='Matricula'></td>
               <td data-label='Nome'>{user.nomeCompleto}</td>
               <td data-label='CPF'>{user.cpf}</td>
               <td data-label='Setor'>{user.setor}</td>
