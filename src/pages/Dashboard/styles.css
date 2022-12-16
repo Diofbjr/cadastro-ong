@@ -1,0 +1,13 @@
+
+
+.newContainer{
+    min-height: 85vh;
+}
+.titulo{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    margin: 0 auto;
+
+    color: #d10027 !important;
+}

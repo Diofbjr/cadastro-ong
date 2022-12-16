@@ -17,9 +17,9 @@ const listRef = firebase.firestore().collection('customers').orderBy('created', 
 
 export default function Query(){
   const [users, setUsers] = useState([]);
-  const [nome, setNome] = useState('');
-  const [cpf, setCpf] = useState('');
-  const [setor, setSetor] = useState('');
+
+  const [showPostModal, setShowPostModal] = useState(false);
+  const [detail, setDetail] = useState();
   
 
 
@@ -35,7 +35,10 @@ export default function Query(){
 
 
 
-
+  function togglePostModal(user){
+    setShowPostModal(!showPostModal) //trocando de true pra false
+    setDetail(user);
+  }
 
 
 
@@ -77,7 +80,12 @@ export default function Query(){
 
       </div>
 
-
+      {showPostModal && (
+        <Modal
+          conteudo={detail}
+          close={togglePostModal}
+        />
+      )}
 
       </div>
 
